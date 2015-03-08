@@ -64,9 +64,10 @@
         depth: 4
     }));
 
-    var bfs = new BFS(undirected);
+    var bfs = new BFS(undirected, vertices[0]);
 
     console.log(util.inspect(bfs, {
         depth: 4
     }));
+
 })();
