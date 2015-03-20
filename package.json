@@ -8,8 +8,5 @@
         "test": "node test/test.js"
     },
     "author": "Scott Vickers",
-    "license": "Apache-2.0",
-    "dependencies": {
-        "isNullOrUndefined": "file:./local_modules/isNullOrUndefined"
-    }
+    "license": "Apache-2.0"
 }
