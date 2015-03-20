@@ -1,0 +1,9 @@
+{
+  "name": "isNullOrUndefined",
+  "version": "1.0.0",
+  "description": "",
+  "main": "isNullOrUndefined.js",
+  "private": true,
+  "author": "Scott Vickers",
+  "license": "Apache-2.0"
+}
