@@ -85,4 +85,6 @@
         depth: 4
     }));
 
+    console.log(bfs.findPathTo(2));
+
 })();
