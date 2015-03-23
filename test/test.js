@@ -41,16 +41,14 @@
     directed.insertEdge(vertices[3], vertices[4]);
     directed.insertEdge(vertices[2], vertices[5]);
 
-    console.log(util.inspect(directed, {
-        depth: 4
-    }));
+    // console.log(util.inspect(directed, {
+    //     depth: 4
+    // }));
 
-    var Edge = EdgeFactory.defineEdge();
+    // var Edge = EdgeFactory.defineEdge();
 
     // unweighted undirected graph
-    var undirected = new Graph(10, {
-        EdgeClass: Edge
-    });
+    var undirected = new Graph(10);
 
     undirected.insertEdge(vertices[0], vertices[1]);
     undirected.insertEdge(vertices[0], vertices[2]);
@@ -64,7 +62,7 @@
         depth: 4
     }));
 
-    var bfs = new BFS(undirected, vertices[0]);
+    var bfs = new BFS(undirected, 0);
 
     console.log(util.inspect(bfs, {
         depth: 4
