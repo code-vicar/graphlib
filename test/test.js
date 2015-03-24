@@ -2,10 +2,12 @@
     'use strict';
     var util = require('util');
     var lib = require('../');
+    var findPath = lib.findPath;
     var VertexFactory = lib.VertexFactory;
     var EdgeFactory = lib.EdgeFactory;
     var Graph = lib.Graph;
     var BFS = lib.BFS;
+    var DFS = lib.DFS;
 
     var Vertex = VertexFactory.defineVertex();
     var WeightedEdge = EdgeFactory.defineEdge([{
@@ -43,21 +45,7 @@
         directed.insertEdge(vertices[2], vertices[5]);
         directed.insertEdge(vertices[5], vertices[2]);
 
-        console.log(util.inspect(directed, {
-            depth: 4
-        }));
-
-        var bfs = new BFS(directed, 2, {
-            processEdge: function (v, edge) {
-                console.log(v, util.inspect(edge, {
-                    depth: 4
-                }));
-            }
-        });
-
-        console.log(util.inspect(bfs, {
-            depth: 4
-        }));
+        return directed;
     };
 
     var undirected1 = function () {
@@ -72,23 +60,7 @@
         undirected.insertEdge(vertices[2], vertices[5]);
         undirected.insertEdge(vertices[7], vertices[8]);
 
-        console.log(util.inspect(undirected, {
-            depth: 4
-        }));
-
-        var bfs = new BFS(undirected, 8, {
-            processEdge: function (v, edge) {
-                console.log(v, util.inspect(edge, {
-                    depth: 4
-                }));
-            }
-        });
-
-        console.log(util.inspect(bfs, {
-            depth: 4
-        }));
-
-        console.log(bfs.findPathTo(7));
+        return undirected;
     };
 
     var undirected2 = function () {
@@ -108,35 +80,93 @@
         undirected.insertEdge(vertices[2], vertices[7]);
         undirected.insertEdge(vertices[9], vertices[7]);
 
-        console.log(util.inspect(undirected, {
-            depth: 4
-        }));
-
-        var bfs = new BFS(undirected, 9, {
-            processEdge: function (v, edge) {
-                console.log(v, util.inspect(edge, {
-                    depth: 4
-                }));
-            }
-        });
-
-        console.log(util.inspect(bfs, {
-            depth: 4
-        }));
-
-        console.log(bfs.findPathTo(3));
+        return undirected;
     };
 
-    var which = 0;
+    var g, bfs, dfs, which = 3;
     switch (which) {
         case 0:
-            directed();
+            g = directed();
+            console.log(util.inspect(g, {
+                depth: 4
+            }));
+
+            bfs = new BFS(g, 2, {
+                processEdge: function (v, edge) {
+                    console.log(v, util.inspect(edge, {
+                        depth: 4
+                    }));
+                }
+            });
+
+            console.log(util.inspect(bfs, {
+                depth: 4
+            }));
             break;
         case 1:
-            undirected1();
+            g = undirected1();
+
+            console.log(util.inspect(g, {
+                depth: 4
+            }));
+
+            bfs = new BFS(g, 8, {
+                processEdge: function (v, edge) {
+                    console.log(v, util.inspect(edge, {
+                        depth: 4
+                    }));
+                }
+            });
+
+            console.log(util.inspect(bfs, {
+                depth: 4
+            }));
+
+            console.log(findPath(8, 7, bfs.parent));
+
             break;
         case 2:
-            undirected2();
+            g = undirected2();
+
+            console.log(util.inspect(g, {
+                depth: 4
+            }));
+
+            bfs = new BFS(g, 9, {
+                processEdge: function (v, edge) {
+                    console.log(v, util.inspect(edge, {
+                        depth: 4
+                    }));
+                }
+            });
+
+            console.log(util.inspect(bfs, {
+                depth: 4
+            }));
+
+            console.log(findPath(9, 3, bfs.parent));
+            break;
+        case 3:
+            g = undirected1();
+
+            console.log(util.inspect(g, {
+                depth: 4
+            }));
+
+            dfs = new DFS(g, 0, {
+                processEdge: function (v, edge) {
+                    console.log(v, util.inspect(edge, {
+                        depth: 4
+                    }));
+                }
+            });
+
+            console.log(util.inspect(dfs, {
+                depth: 4
+            }));
+
+            console.log(findPath(0, 5, dfs.parent));
+
             break;
     }
 
