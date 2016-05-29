@@ -1,6 +1,11 @@
 import StateBag from './statebag'
 
-export default function BFS(graph, startId, cbs) {
+export default function BFS(graph, startId) {
+    let bfs = BFS_generator(graph, startId)
+    return bfs.next().value
+}
+
+export function *BFS_generator(graph, startId, opts) {
     let stateBag = new StateBag(['Status', 'Parent'])
 
     // set initial state of all vertices
@@ -17,8 +22,10 @@ export default function BFS(graph, startId, cbs) {
 
     do {
         let vertex = queue.shift()
-        if (cbs && typeof cbs.processVertexEarly === 'function') {
-            cbs.processVertexEarly(vertex)
+        if (opts && opts.yieldVertexEarly === true) {
+            if ((yield vertex) === true) {
+                return
+            }
         }
 
         for (let edge of graph.getEdges(vertex) || []) {
@@ -27,8 +34,10 @@ export default function BFS(graph, startId, cbs) {
             let status = stateBag.getStatus(neighbor)
 
             if (status !== STATUS.processed || graph.directed === true) {
-                if (cbs && typeof cbs.processEdge === 'function') {
-                    cbs.processEdge(vertex, edge)
+                if (opts && opts.yieldEdge === true) {
+                    if ((yield edge) === true) {
+                        return
+                    }
                 }
             }
 
@@ -39,8 +48,10 @@ export default function BFS(graph, startId, cbs) {
             }
         }
 
-        if (cbs && typeof cbs.processVertexLate === 'function') {
-            cbs.processVertexLate(vertex)
+        if (opts && opts.yieldVertexLate === true) {
+            if ((yield vertex) === true) {
+                return
+            }
         }
 
         stateBag.setStatus(vertex, STATUS.processed)

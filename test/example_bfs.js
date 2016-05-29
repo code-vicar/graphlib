@@ -1,7 +1,7 @@
 var util = require('util')
 
 import Graph from '../src/Graph'
-import BFS from '../src/traversal/bfs'
+import { BFS_generator } from '../src/traversal/bfs'
 
 let vertices = []
 for (let i = 0; i < 10; i++) {
@@ -74,29 +74,22 @@ let traversals = [
 for (let t of traversals) {
     console.log(`*** RUNNING BFS ON ${t.title} ***`)
 
-    let bfs = BFS(t.g, t.start, {
-        processVertexEarly,
-        processEdge,
-        processVertexLate
+    let bfs = BFS_generator(t.g, t.start, {
+        yieldVertexEarly: true,
+        yieldEdge: true,
+        yieldVertexLate: true
     })
 
-    console.log('')
-}
+    let step
+    do {
+        // stop the search of we've processed vertex with id of 1
+        step = bfs.next(step && step.value && step.value['@@vertexId'] === 1)
 
-function processVertexEarly(v) {
-    console.log(`processing vertex (early): ${util.inspect(v, {
-        depth: 4
-    })}`)
-}
+        if (!step.done) {
+            console.log(step.value)
+        }
+    }
+    while (step && !step.done)
 
-function processEdge(v, edge) {
-    console.log(`processing edge: ${util.inspect(edge, {
-        depth: 4
-    })}`)
-}
-
-function processVertexLate(v) {
-    console.log(`processing vertex (late): ${util.inspect(v, {
-        depth: 4
-    })}`)
+    console.log('*** DONE ***')
 }
