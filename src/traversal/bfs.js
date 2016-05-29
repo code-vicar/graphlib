@@ -23,8 +23,8 @@ export function *BFS_generator(graph, startId, opts) {
     do {
         let vertex = queue.shift()
         if (opts && opts.yieldVertexEarly === true) {
-            if ((yield vertex) === true) {
-                return
+            if ((yield { opt: 'yieldVertexEarly', vertex }) === true) {
+                return stateBag
             }
         }
 
@@ -35,8 +35,8 @@ export function *BFS_generator(graph, startId, opts) {
 
             if (status !== STATUS.processed || graph.directed === true) {
                 if (opts && opts.yieldEdge === true) {
-                    if ((yield edge) === true) {
-                        return
+                    if ((yield { opt: 'yieldEdge', vertex, edge, neighbor }) === true) {
+                        return stateBag
                     }
                 }
             }
@@ -49,8 +49,8 @@ export function *BFS_generator(graph, startId, opts) {
         }
 
         if (opts && opts.yieldVertexLate === true) {
-            if ((yield vertex) === true) {
-                return
+            if ((yield { opt: 'yieldVertexLate', vertex }) === true) {
+                return stateBag
             }
         }
 

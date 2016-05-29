@@ -8,6 +8,7 @@
     "build": "gulp build",
     "test": "mocha -r babel-register test/test.js",
     "example_bfs": "mocha -r babel-register test/example_bfs.js",
+    "example_bfs_findPath": "mocha -r babel-register test/example_bfs_findPath.js",
     "example_dfs": "mocha -r babel-register test/example_dfs.js"
   },
   "author": "Scott Vickers",

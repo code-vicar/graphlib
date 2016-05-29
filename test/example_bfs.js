@@ -83,7 +83,7 @@ for (let t of traversals) {
     let step
     do {
         // stop the search of we've processed vertex with id of 1
-        step = bfs.next(step && step.value && step.value['@@vertexId'] === 1)
+        step = bfs.next(step && step.value && step.value.vertex['@@vertexId'] === 1)
 
         if (!step.done) {
             console.log(step.value)
