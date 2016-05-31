@@ -59,9 +59,10 @@ export function* DFS_recursive_generator(graph, startId, opts) {
             }
         }
 
-        clock++
-        stateBag.setExitTime(vertex, clock)
         stateBag.setStatus(vertex, STATUS.processed)
+        stateBag.setExitTime(vertex, clock)
+        clock++
+
     }
 
     return stateBag
