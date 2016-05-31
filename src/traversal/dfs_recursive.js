@@ -35,15 +35,15 @@ export function* DFS_recursive_generator(graph, startId, opts) {
         for (let edge of graph.getEdges(vertex) || []) {
             let neighbor = graph.getVertex(edge.vertexId)
 
+            let neighborStatus = stateBag.getStatus(neighbor)
+
             if (opts && opts.yieldEdge === true) {
-                if ((stateBag.getParent(vertex) !== neighbor) || graph.directed === true) {
+                if ((neighborStatus !== STATUS.processed && stateBag.getParent(vertex) !== neighbor) || graph.directed === true) {
                     if ((yield { opt: 'yieldEdge', vertex, edge, neighbor }) === true) {
                         return true
                     }
                 }
             }
-
-            let neighborStatus = stateBag.getStatus(neighbor)
 
             if (neighborStatus === STATUS.undiscovered) {
                 stateBag.setParent(neighbor, vertex)
