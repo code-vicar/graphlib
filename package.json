@@ -9,7 +9,8 @@
     "test": "mocha -r babel-register test/test.js",
     "example_bfs": "mocha -r babel-register test/example_bfs.js",
     "example_bfs_findPath": "mocha -r babel-register test/example_bfs_findPath.js",
-    "example_dfs": "mocha -r babel-register test/example_dfs.js"
+    "example_dfs": "mocha -r babel-register test/example_dfs.js",
+    "example_dfs_findPath": "mocha -r babel-register test/example_dfs_findPath.js"
   },
   "author": "Scott Vickers",
   "license": "Apache-2.0",

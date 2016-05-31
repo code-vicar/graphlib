@@ -1,62 +1,68 @@
 import StateBag from './statebag'
 
-export default function BFS(graph, startId) {
-    let bfs = BFS_generator(graph, startId)
-    return bfs.next().value
+export default function DFS_recursive(graph, startId) {
+    let dfs = DFS_recursive_generator(graph, startId)
+    return dfs.next().value
 }
 
-export function* BFS_generator(graph, startId, opts) {
-    let stateBag = new StateBag(['Status', 'Parent'])
+export function* DFS_recursive_generator(graph, startId, opts) {
+    if (!graph.hasVertex(startId)) {
+        throw new Error(`Vertex ${startId} is not in the graph`)
+    }
+
+    let stateBag = new StateBag(['Status', 'Parent', 'EntryTime', 'ExitTime'])
+    let clock = 0
 
     // set initial state of all vertices
     for (let vertex of graph.getVertices()) {
         stateBag.setStatus(vertex, STATUS.undiscovered)
     }
 
-    // set starting node state to discovered
-    let start = graph.getVertex(startId)
-    stateBag.setStatus(start, STATUS.discovered)
+    yield* _dfs(graph.getVertex(startId))
 
-    // push starting node into queue
-    var queue = [start]
+    function* _dfs(vertex) {
+        clock++
+        stateBag.setEntryTime(vertex, clock)
 
-    do {
-        let vertex = queue.shift()
         if (opts && opts.yieldVertexEarly === true) {
             if ((yield { opt: 'yieldVertexEarly', vertex }) === true) {
-                return stateBag
+                return true
             }
         }
+
+        stateBag.setStatus(vertex, STATUS.discovered)
 
         for (let edge of graph.getEdges(vertex) || []) {
             let neighbor = graph.getVertex(edge.vertexId)
 
-            let neighborStatus = stateBag.getStatus(neighbor)
-
-            if (neighborStatus !== STATUS.processed || graph.directed === true) {
-                if (opts && opts.yieldEdge === true) {
+            if (opts && opts.yieldEdge === true) {
+                if ((stateBag.getParent(vertex) !== neighbor) || graph.directed === true) {
                     if ((yield { opt: 'yieldEdge', vertex, edge, neighbor }) === true) {
-                        return stateBag
+                        return true
                     }
                 }
             }
 
+            let neighborStatus = stateBag.getStatus(neighbor)
+
             if (neighborStatus === STATUS.undiscovered) {
-                stateBag.setStatus(neighbor, STATUS.discovered)
                 stateBag.setParent(neighbor, vertex)
-                queue.push(neighbor)
+                if ((yield* _dfs(neighbor)) === true) {
+                    return true
+                }
             }
         }
 
         if (opts && opts.yieldVertexLate === true) {
             if ((yield { opt: 'yieldVertexLate', vertex }) === true) {
-                return stateBag
+                return true
             }
         }
 
+        clock++
+        stateBag.setExitTime(vertex, clock)
         stateBag.setStatus(vertex, STATUS.processed)
     }
-    while (queue.length > 0)
 
     return stateBag
 }
