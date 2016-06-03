@@ -1,11 +1,11 @@
 import StateBag from './statebag'
 
-export default function DFS_recursive(graph, startId) {
-    let dfs = DFS_recursive_generator(graph, startId)
+export default function DFS(graph, startId) {
+    let dfs = DFS_generator(graph, startId)
     return dfs.next().value
 }
 
-export function* DFS_recursive_generator(graph, startId, opts) {
+export function* DFS_generator(graph, startId, opts) {
     if (!graph.hasVertex(startId)) {
         throw new Error(`Vertex ${startId} is not in the graph`)
     }

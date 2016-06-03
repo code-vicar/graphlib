@@ -1,7 +1,10 @@
 var util = require('util')
 
 import Graph from '../src/Graph'
-import findPathDFS from '../src/findPathDfs'
+import findPath, { SEARCH_TYPE } from '../src/findPath'
+import _ from 'lodash'
+
+let findPathDFS = _.partialRight(findPath, [SEARCH_TYPE.DFS])
 
 let vertices = []
 for (let i = 0; i < 10; i++) {
@@ -23,21 +26,21 @@ console.log('*** directed ***')
 try {
     console.log(`*** 0 to 5 ***`)
     console.log(findPathDFS(directedGraph, 0, 5))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 3 to 5 ***`)
     console.log(findPathDFS(directedGraph, 3, 5))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 2 to 4 ***`)
     console.log(findPathDFS(directedGraph, 2, 4))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
@@ -54,34 +57,34 @@ console.log('*** undirected ***')
 try {
     console.log(`*** 0 to 5 ***`)
     console.log(findPathDFS(undirectedGraph, 0, 5))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 3 to 5 ***`)
     console.log(findPathDFS(undirectedGraph, 3, 5))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 4 to 0 ***`)
     console.log(findPathDFS(undirectedGraph, 4, 0))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 0 to 0 ***`)
     console.log(findPathDFS(undirectedGraph, 0, 0))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** -1 to 100 ***`)
     console.log(findPathDFS(undirectedGraph, -1, 100))
-} catch(e) {
+} catch (e) {
     console.log(e)
 }

@@ -1,7 +1,7 @@
 var util = require('util')
 
 import Graph from '../src/Graph'
-import DFS from '../src/traversal/dfs'
+import { DFS_generator } from '../src/traversal/dfs'
 
 let vertices = []
 for (let i = 0; i < 10; i++) {
@@ -74,29 +74,21 @@ let traversals = [
 for (let t of traversals) {
     console.log(`*** RUNNING DFS ON ${t.title} ***`)
 
-    let dfs = DFS(t.g, t.start, {
-        processVertexEarly,
-        processEdge,
-        processVertexLate
+    let dfs = DFS_generator(t.g, t.start, {
+        yieldVertexEarly: true,
+        yieldEdge: true,
+        yieldVertexLate: true
     })
 
-    console.log('')
-}
+    let step
+    do {
+        step = dfs.next()
 
-function processVertexEarly(v) {
-    console.log(`processing vertex (early): ${util.inspect(v, {
-        depth: 4
-    })}`)
-}
+        if (!step.done) {
+            console.log(step.value)
+        }
+    }
+    while (step && !step.done)
 
-function processEdge(v, edge) {
-    console.log(`processing edge: ${util.inspect(edge, {
-        depth: 4
-    })}`)
-}
-
-function processVertexLate(v) {
-    console.log(`processing vertex (late): ${util.inspect(v, {
-        depth: 4
-    })}`)
+    console.log('*** DONE ***')
 }

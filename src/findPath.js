@@ -1,6 +1,11 @@
-import { BFS_generator } from '../src/traversal/bfs'
+import * as search_generators from '../src/traversal'
 
-export default function findPathBFS(graph, startId, endId) {
+export const SEARCH_TYPE = {
+    BFS: 'BFS',
+    DFS: 'DFS'
+}
+
+export default function findPath(graph, startId, endId, type = SEARCH_TYPE.BFS) {
     if (!graph.hasVertex(startId) || !graph.hasVertex(endId)) {
         throw new Error('startId and endId must be contained in the graph')
     }
@@ -9,7 +14,9 @@ export default function findPathBFS(graph, startId, endId) {
         return [graph.getVertex(startId)]
     }
 
-    let bfs = BFS_generator(graph, startId, {
+    let search = resolveSearchType(type)
+
+    let iter = search(graph, startId, {
         yieldEdge: true
     })
 
@@ -19,7 +26,7 @@ export default function findPathBFS(graph, startId, endId) {
     do {
         opt = (step && step.value) ? step.value : null
         found = opt && opt.edge && opt.edge.vertexId === endId
-        step = bfs.next(found)
+        step = iter.next(found)
     } while (!step.done)
 
     if (!found) {
@@ -28,15 +35,19 @@ export default function findPathBFS(graph, startId, endId) {
 
     // backtrack from the end node following parents
     let path = [opt.neighbor]
-    let bfs_state = step.value
+    let search_state = step.value
 
     let p = opt.vertex
     while (p['@@vertexId'] !== startId) {
         path.unshift(p)
 
-        p = bfs_state.getParent(p)
+        p = search_state.getParent(p)
     }
     path.unshift(p)
 
     return path
+}
+
+function resolveSearchType(type) {
+    return search_generators[`${type}_generator`]
 }
