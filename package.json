@@ -4,6 +4,9 @@
   "description": "",
   "private": true,
   "main": "index.js",
+  "engines" : {
+      "node" : ">=4.4.4"
+  },
   "scripts": {
     "build": "gulp build",
     "test": "mocha -r babel-register test/test.js",

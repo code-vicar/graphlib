@@ -1,5 +1,4 @@
 *.sublime-*
-node_modules/*
-!node_modules/isNullOrUndefined
+node_modules
 dist
 npm-debug*
