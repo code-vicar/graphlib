@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export default class Graph {
     constructor(vertices = [], directed = false) {
         this.directed = directed
@@ -38,6 +40,24 @@ export default class Graph {
 
     getEdges(v) {
         return this.adjacencies.get(unwrapId(v))
+    }
+
+    getEdgesBetween(fromVertex, toVertex) {
+        if (!this.hasVertex(fromVertex) || !this.hasVertex(toVertex)) {
+            return []
+        }
+
+        let toVertexId = unwrapId(toVertex)
+
+        let edges = this.getEdges(fromVertex) || []
+        return _.filter(edges, (edge) => {
+            return edge.vertexId === toVertexId
+        })
+    }
+
+    hasEdge(fromVertex, toVertex) {
+        let edges = this.getEdgesBetween(fromVertex, toVertex)
+        return (edges.length > 0)
     }
 
     addVertex(v) {
@@ -104,14 +124,14 @@ export default class Graph {
         var listX = this.adjacencies.get(xId) || []
 
         // create the edge and add it to the list
-        listX.push({id: this.edgeCount, vertexId: yId, ext: data})
+        listX.push({ id: this.edgeCount, vertexId: yId, ext: data })
 
         this.adjacencies.set(xId, listX)
     }
 
     _addEdgeDegree(vertexId, direction) {
         let map = new Map()
-        switch(direction) {
+        switch (direction) {
             case 'total': {
                 map = this['degrees']
                 break;
