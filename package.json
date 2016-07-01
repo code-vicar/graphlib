@@ -1,6 +1,6 @@
 {
   "name": "@code-vicar/graphlib",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "General purpose adjacency list graph",
   "main": "index.js",
   "engines" : {
