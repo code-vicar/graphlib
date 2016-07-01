@@ -14,7 +14,7 @@ export default class Graph {
         this.vertices = new Map()
         for (let vertex of vertices) {
             this.addVertex(vertex)
-            this.degrees.set(unwrapId(vertex), 0)
+            this.degrees.set(Graph.unwrapId(vertex), 0)
         }
     }
 
@@ -35,11 +35,11 @@ export default class Graph {
     }
 
     hasVertex(v) {
-        return this.vertices.has(unwrapId(v))
+        return this.vertices.has(Graph.unwrapId(v))
     }
 
     getEdges(v) {
-        return this.adjacencies.get(unwrapId(v))
+        return this.adjacencies.get(Graph.unwrapId(v))
     }
 
     getEdgesBetween(fromVertex, toVertex) {
@@ -47,7 +47,7 @@ export default class Graph {
             return []
         }
 
-        let toVertexId = unwrapId(toVertex)
+        let toVertexId = Graph.unwrapId(toVertex)
 
         let edges = this.getEdges(fromVertex) || []
         return _.filter(edges, (edge) => {
@@ -62,15 +62,26 @@ export default class Graph {
 
     addVertex(v) {
         if (this.hasVertex(v)) {
-            throw new Error(`Vertex (${unwrapId(v)}) already exists, vertex ids must be unique`)
+            throw new Error(`Vertex (${Graph.unwrapId(v)}) already exists, vertex ids must be unique`)
         }
 
-        if (!isVertex(v)) {
+        if (!Graph.isVertex(v)) {
             throw new Error(`Cannot insert vertex ${v}, is not a valid vertex`)
         }
 
-        this.vertices.set(unwrapId(v), v)
+        this.vertices.set(Graph.unwrapId(v), v)
         return this
+    }
+
+    static isVertex(v) {
+        return v && Object.prototype.hasOwnProperty.call(v, '@@vertexId')
+    }
+
+    static unwrapId(v) {
+        if (Graph.isVertex(v)) {
+            return v['@@vertexId']
+        }
+        return v
     }
 
     /*
@@ -93,8 +104,8 @@ export default class Graph {
         data: optional data to associate with new edges
     */
     connect(x, y, data) {
-        let xId = unwrapId(x)
-        let yId = unwrapId(y)
+        let xId = Graph.unwrapId(x)
+        let yId = Graph.unwrapId(y)
         for (let vertexId of [xId, yId]) {
             if (!this.hasVertex(vertexId)) {
                 throw new Error(`Cannot find vertex with id ${vertexId}`)
@@ -152,13 +163,3 @@ export default class Graph {
     }
 }
 
-function isVertex(vertex) {
-    return vertex && Object.prototype.hasOwnProperty.call(vertex, '@@vertexId')
-}
-
-function unwrapId(vertex) {
-    if (isVertex(vertex)) {
-        return vertex['@@vertexId']
-    }
-    return vertex
-}

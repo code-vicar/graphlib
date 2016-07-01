@@ -1,11 +1,12 @@
 import StateBag from './statebag'
+import Graph from '../graph'
 
 export default function BFS(graph, startId) {
     let bfs = BFS_generator(graph, startId)
     return bfs.next().value
 }
 
-export function* BFS_generator(graph, startId, opts) {
+export function* BFS_generator(graph, start, opts) {
     let stateBag = new StateBag(['Status', 'Parent'])
 
     // set initial state of all vertices
@@ -14,7 +15,16 @@ export function* BFS_generator(graph, startId, opts) {
     }
 
     // set starting node state to discovered
-    let start = graph.getVertex(startId)
+    if (Graph.isVertex(start) && !graph.hasVertex(start)) {
+        throw new Error('Source vertex is not in the graph')
+    }
+    if (!Graph.isVertex(start)) {
+        start = graph.getVertex(start)
+        if (!start) {
+            throw new Error('Source vertex is not in the graph')
+        }
+    }
+
     stateBag.setStatus(start, STATUS.discovered)
 
     // push starting node into queue

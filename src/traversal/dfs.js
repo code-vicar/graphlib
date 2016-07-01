@@ -1,13 +1,21 @@
 import StateBag from './statebag'
+import Graph from '../graph'
 
 export default function DFS(graph, startId) {
     let dfs = DFS_generator(graph, startId)
     return dfs.next().value
 }
 
-export function* DFS_generator(graph, startId, opts) {
-    if (!graph.hasVertex(startId)) {
-        throw new Error(`Vertex ${startId} is not in the graph`)
+export function* DFS_generator(graph, start, opts) {
+    if (Graph.isVertex(start) && !graph.hasVertex(start)) {
+        throw new Error('Source vertex is not in the graph')
+    }
+
+    if (!Graph.isVertex(start)) {
+        start = graph.getVertex(start)
+        if (!start) {
+            throw new Error('Source vertex is not in the graph')
+        }
     }
 
     let stateBag = new StateBag(['Status', 'Parent', 'EntryTime', 'ExitTime'])
@@ -18,7 +26,7 @@ export function* DFS_generator(graph, startId, opts) {
         stateBag.setStatus(vertex, STATUS.undiscovered)
     }
 
-    yield* _dfs(graph.getVertex(startId))
+    yield* _dfs(start)
 
     function* _dfs(vertex) {
         clock++

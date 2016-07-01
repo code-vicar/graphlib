@@ -7,5 +7,7 @@ module.exports = {
     Graph: Graph.default,
     findPath: findPath.default,
     BFS: BFS.default,
-    DFS: DFS.default
+    BFS_generator: BFS.BFS_generator,
+    DFS: DFS.default,
+    DFS_generator: DFS.DFS_generator
 }
