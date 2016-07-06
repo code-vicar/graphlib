@@ -1,4 +1,4 @@
-import * as search_generators from '../src/traversal'
+import * as search_generators from './traversal'
 
 export const SEARCH_TYPE = {
     BFS: 'BFS',
