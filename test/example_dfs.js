@@ -85,7 +85,12 @@ for (let t of traversals) {
         step = dfs.next()
 
         if (!step.done) {
-            console.log(step.value)
+            let data = {opt: step.value.opt, vertex: step.value.vertex}
+            if (step.value.opt === 'yieldEdge') {
+                delete data.vertex
+                data.neighbor = step.value.neighbor
+            }
+            console.log(data)
         }
     }
     while (step && !step.done)

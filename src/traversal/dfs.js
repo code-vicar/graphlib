@@ -32,38 +32,39 @@ export function* DFS_generator(graph, start, opts) {
         clock++
         stateBag.setEntryTime(vertex, clock)
 
+        stateBag.setStatus(vertex, STATUS.discovered)
+
         if (opts && opts.yieldVertexEarly === true) {
-            if ((yield { opt: 'yieldVertexEarly', vertex }) === true) {
+            if ((yield { opt: 'yieldVertexEarly', vertex, state: stateBag }) === true) {
                 return true
             }
         }
-
-        stateBag.setStatus(vertex, STATUS.discovered)
 
         for (let edge of graph.getEdges(vertex) || []) {
             let neighbor = graph.getVertex(edge.vertexId)
 
             let neighborStatus = stateBag.getStatus(neighbor)
 
+            // update search stage before yielding the edge
+            let mustGoDeeper = false
+            if (neighborStatus === STATUS.undiscovered) {
+                stateBag.setParent(neighbor, vertex)
+                mustGoDeeper = true
+            }
+
             if (opts && opts.yieldEdge === true) {
                 if ((neighborStatus !== STATUS.processed && stateBag.getParent(vertex) !== neighbor) || graph.directed === true) {
-                    if ((yield { opt: 'yieldEdge', vertex, edge, neighbor }) === true) {
+                    if ((yield { opt: 'yieldEdge', vertex, edge, neighbor, state: stateBag }) === true) {
                         return true
                     }
                 }
             }
 
-            if (neighborStatus === STATUS.undiscovered) {
-                stateBag.setParent(neighbor, vertex)
+            // if the neighbor was discovered by this edge then start processing the neighbor
+            if (mustGoDeeper) {
                 if ((yield* _dfs(neighbor)) === true) {
                     return true
                 }
-            }
-        }
-
-        if (opts && opts.yieldVertexLate === true) {
-            if ((yield { opt: 'yieldVertexLate', vertex }) === true) {
-                return true
             }
         }
 
@@ -71,6 +72,11 @@ export function* DFS_generator(graph, start, opts) {
         stateBag.setExitTime(vertex, clock)
         clock++
 
+        if (opts && opts.yieldVertexLate === true) {
+            if ((yield { opt: 'yieldVertexLate', vertex, state: stateBag }) === true) {
+                return true
+            }
+        }
     }
 
     return stateBag
