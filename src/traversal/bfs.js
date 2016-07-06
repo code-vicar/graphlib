@@ -33,7 +33,7 @@ export function* BFS_generator(graph, start, opts) {
     do {
         let vertex = queue.shift()
         if (opts && opts.yieldVertexEarly === true) {
-            if ((yield { opt: 'yieldVertexEarly', vertex }) === true) {
+            if ((yield { opt: 'yieldVertexEarly', vertex, state: stateBag }) === true) {
                 return stateBag
             }
         }
@@ -43,28 +43,28 @@ export function* BFS_generator(graph, start, opts) {
 
             let neighborStatus = stateBag.getStatus(neighbor)
 
-            if (neighborStatus !== STATUS.processed || graph.directed === true) {
-                if (opts && opts.yieldEdge === true) {
-                    if ((yield { opt: 'yieldEdge', vertex, edge, neighbor }) === true) {
-                        return stateBag
-                    }
-                }
-            }
-
             if (neighborStatus === STATUS.undiscovered) {
                 stateBag.setStatus(neighbor, STATUS.discovered)
                 stateBag.setParent(neighbor, vertex)
                 queue.push(neighbor)
             }
-        }
 
-        if (opts && opts.yieldVertexLate === true) {
-            if ((yield { opt: 'yieldVertexLate', vertex }) === true) {
-                return stateBag
+            if (neighborStatus !== STATUS.processed || graph.directed === true) {
+                if (opts && opts.yieldEdge === true) {
+                    if ((yield { opt: 'yieldEdge', vertex, edge, neighbor, state: stateBag }) === true) {
+                        return stateBag
+                    }
+                }
             }
         }
 
         stateBag.setStatus(vertex, STATUS.processed)
+
+        if (opts && opts.yieldVertexLate === true) {
+            if ((yield { opt: 'yieldVertexLate', vertex, state: stateBag }) === true) {
+                return stateBag
+            }
+        }
     }
     while (queue.length > 0)
 
