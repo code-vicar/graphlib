@@ -1,5 +1,16 @@
 {
     "presets": [
-        "es2015-native-generators"
+      ["@babel/env", {
+        "targets": {
+          "node": "current",
+          "browsers": [
+            "last 1 version",
+            "> 1%",
+            "maintained node versions",
+            "not dead"
+          ]
+        },
+        "useBuiltIns": "usage"
+      }]
     ]
-}
+  }

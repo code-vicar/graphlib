@@ -1,10 +1,7 @@
-var util = require('util')
+const Graph = require('../lib/Graph').default
+const { default: findPath, SEARCH_TYPE } = require('../lib/findPath')
 
-import Graph from '../src/Graph'
-import findPath, { SEARCH_TYPE } from '../src/findPath'
-import _ from 'lodash'
-
-let findPathBFS = _.partialRight(findPath, [SEARCH_TYPE.BFS])
+const findPathDFS = (...args) => findPath(...args, SEARCH_TYPE.DFS)
 
 let vertices = []
 for (let i = 0; i < 10; i++) {
@@ -20,26 +17,26 @@ directedGraph.connect(3, 4)
 directedGraph.connect(2, 5)
 directedGraph.connect(5, 2)
 
-console.log('*** BFS find path ***')
+console.log('*** DFS find path ***')
 
 console.log('*** directed ***')
 try {
     console.log(`*** 0 to 5 ***`)
-    console.log(findPathBFS(directedGraph, 0, 5))
+    console.log(findPathDFS(directedGraph, 0, 5))
 } catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 3 to 5 ***`)
-    console.log(findPathBFS(directedGraph, 3, 5))
+    console.log(findPathDFS(directedGraph, 3, 5))
 } catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 2 to 4 ***`)
-    console.log(findPathBFS(directedGraph, 2, 4))
+    console.log(findPathDFS(directedGraph, 2, 4))
 } catch (e) {
     console.log(e)
 }
@@ -56,35 +53,35 @@ undirectedGraph.connect(7, 8)
 console.log('*** undirected ***')
 try {
     console.log(`*** 0 to 5 ***`)
-    console.log(findPathBFS(undirectedGraph, 0, 5))
+    console.log(findPathDFS(undirectedGraph, 0, 5))
 } catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 3 to 5 ***`)
-    console.log(findPathBFS(undirectedGraph, 3, 5))
+    console.log(findPathDFS(undirectedGraph, 3, 5))
 } catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 4 to 0 ***`)
-    console.log(findPathBFS(undirectedGraph, 4, 0))
+    console.log(findPathDFS(undirectedGraph, 4, 0))
 } catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** 0 to 0 ***`)
-    console.log(findPathBFS(undirectedGraph, 0, 0))
+    console.log(findPathDFS(undirectedGraph, 0, 0))
 } catch (e) {
     console.log(e)
 }
 
 try {
     console.log(`*** -1 to 100 ***`)
-    console.log(findPathBFS(undirectedGraph, -1, 100))
+    console.log(findPathDFS(undirectedGraph, -1, 100))
 } catch (e) {
     console.log(e)
 }

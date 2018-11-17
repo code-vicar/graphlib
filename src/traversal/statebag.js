@@ -1,12 +1,12 @@
-import _ from 'lodash'
+import curry from 'lodash.curry'
 
 export default class StateBag {
     constructor(props) {
         this.map = new Map()
 
         for (let prop of props) {
-            this[`get${prop}`] = _.curry(this.getProp)(prop)
-            this[`set${prop}`] = _.curry(this.setProp)(prop)
+            this[`get${prop}`] = curry(this.getProp)(prop)
+            this[`set${prop}`] = curry(this.setProp)(prop)
         }
     }
 

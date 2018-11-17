@@ -1,7 +1,5 @@
-var util = require('util')
-
-import Graph from '../src/Graph'
-import { DFS_generator } from '../src/traversal/dfs'
+const Graph = require('../lib/Graph').default
+const { BFS_generator } = require('../lib/traversal/bfs')
 
 let vertices = []
 for (let i = 0; i < 10; i++) {
@@ -72,9 +70,9 @@ let traversals = [
 ]
 
 for (let t of traversals) {
-    console.log(`*** RUNNING DFS ON ${t.title} ***`)
+    console.log(`*** RUNNING BFS ON ${t.title} ***`)
 
-    let dfs = DFS_generator(t.g, t.start, {
+    let bfs = BFS_generator(t.g, t.start, {
         yieldVertexEarly: true,
         yieldEdge: true,
         yieldVertexLate: true
@@ -82,7 +80,7 @@ for (let t of traversals) {
 
     let step
     do {
-        step = dfs.next()
+        step = bfs.next()
 
         if (!step.done) {
             let data = {opt: step.value.opt, vertex: step.value.vertex}

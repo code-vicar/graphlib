@@ -1,4 +1,4 @@
-import { before, describe, it } from 'mocha'
+import { describe, it } from 'mocha'
 import { expect } from 'chai'
 
 import Graph from '../src/graph'

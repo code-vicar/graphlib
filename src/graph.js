@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export default class Graph {
     constructor(vertices = [], directed = false) {
         this.directed = directed
@@ -47,12 +45,10 @@ export default class Graph {
             return []
         }
 
-        let toVertexId = Graph.unwrapId(toVertex)
+        const toVertexId = Graph.unwrapId(toVertex)
 
-        let edges = this.getEdges(fromVertex) || []
-        return _.filter(edges, (edge) => {
-            return edge.vertexId === toVertexId
-        })
+        const edges = this.getEdges(fromVertex) || []
+        return edges.filter(edge => edge.vertexId === toVertexId)
     }
 
     hasEdge(fromVertex, toVertex) {

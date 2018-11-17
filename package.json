@@ -1,37 +1,35 @@
 {
   "name": "@code-vicar/graphlib",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "General purpose adjacency list graph",
-  "main": "index.js",
-  "engines" : {
-      "node" : ">=4.4.4"
+  "main": "lib/index.js",
+  "engines": {
+    "node": ">=8"
   },
   "scripts": {
-    "build": "gulp build",
-    "test": "mocha -r babel-register test/test.js",
-    "prepublish": "npm run build",
-    "example_bfs": "mocha -r babel-register test/example_bfs.js",
-    "example_bfs_findPath": "mocha -r babel-register test/example_bfs_findPath.js",
-    "example_dfs": "mocha -r babel-register test/example_dfs.js",
-    "example_dfs_findPath": "mocha -r babel-register test/example_dfs_findPath.js"
+    "test": "mocha -r @babel/register test/**/*-test.js",
+    "prepare": "npm run compile && npm run bundle",
+    "compile": "rm -rf lib && babel src -d lib",
+    "bundle": "rm -rf bundle && webpack --mode=production lib/index.js -o ./bundle/graphlib.js"
   },
-  "repository" :
-  {
-      "type" : "git",
-      "url" : "https://github.com/code-vicar/graphlib.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/code-vicar/graphlib.git"
   },
   "author": "Scott Vickers",
   "license": "Apache-2.0",
   "devDependencies": {
-    "babel-preset-es2015-native-generators": "^6.6.0",
-    "babel-register": "^6.9.0",
-    "chai": "^3.5.0",
-    "del": "^2.2.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "mocha": "^2.5.3"
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/register": "^7.0.0",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
-    "lodash": "^4.13.1"
+    "@babel/polyfill": "^7.0.0",
+    "lodash.curry": "^4.1.1"
   }
 }
